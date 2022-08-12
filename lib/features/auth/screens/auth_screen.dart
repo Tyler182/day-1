@@ -30,9 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _passController = TextEditingController();
   // final _login = 'Tyler182';
   // final _password = 'RXDYNky9HvnP';
-  late final TokenDto token;
-  // final prefs = SharedPreferences.getInstance();
-  // late TokenDto tokenDto;
+  late TokenDto token;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +125,6 @@ class _AuthScreenState extends State<AuthScreen> {
       var authRepository = AuthRepository(studyJamClient);
       token = await authRepository.signIn(login: _loginController.text, password: _passController.text);
       var prefs = await SharedPreferences.getInstance();
-      // print(token.token);
       await prefs.setString('token', token.token);
       // token = TokenDto(token: prefs.getString('token')!);
       _pushToChat(context, token);
