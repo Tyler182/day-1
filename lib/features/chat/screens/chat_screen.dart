@@ -93,10 +93,7 @@ class _ChatBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ScrollController __controller = ScrollController(initialScrollOffset: ScrollController().position.maxScrollExtent);
     return ListView.builder(
-      // reverse: true,
-      // controller: __controller,
       shrinkWrap: true,
       itemCount: messages.length,
       itemBuilder: (_, index) => _ChatMessage(

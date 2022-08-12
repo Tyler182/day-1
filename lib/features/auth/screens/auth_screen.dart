@@ -28,8 +28,8 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final _login = 'Tyler182';
-  final _password = 'RXDYNky9HvnP';
+  // final _login = 'Tyler182';
+  // final _password = 'RXDYNky9HvnP';
   late final TokenDto token;
   // final prefs = SharedPreferences.getInstance();
   // late TokenDto tokenDto;
@@ -125,7 +125,7 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       var studyJamClient = StudyJamClient();
       var authRepository = AuthRepository(studyJamClient);
-      token = await authRepository.signIn(login: _login, password: _password);
+      token = await authRepository.signIn(login: _loginController.text, password: _passController.text);
       var prefs = await SharedPreferences.getInstance();
       // print(token.token);
       await prefs.setString('token', token.token);
