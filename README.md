@@ -37,7 +37,7 @@ await prefs.setString('token', token.token);
 Реализовано отображение `ChatMessageGeolocationDto`.
 
 <p align="center">
-<img src="./docs/assets/day1/chatmessagegeolocationdto.png" width="400" alt="" />
+<img src="./docs/assets/day1/chat-message-geo-location-dto.png" width="400" alt="" />
 </p>
 
 ### Задание 3. Отправка геолокации 🔥
