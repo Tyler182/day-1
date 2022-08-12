@@ -3,6 +3,8 @@ import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_dto
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_dto.dart';
 import 'package:surf_study_jam/surf_study_jam.dart';
 
+
+
 /// Data transfer object representing geolocation chat message.
 class ChatMessageGeolocationDto extends ChatMessageDto {
   /// Location point.

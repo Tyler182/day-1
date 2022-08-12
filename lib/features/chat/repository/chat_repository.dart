@@ -92,6 +92,8 @@ class ChatRepository implements IChatRepository {
     if (message != null && message.length > IChatRepository.maxMessageLength) {
       throw InvalidMessageException('Message "$message" is too large.');
     }
+    print('111');
+    print(location.toGeopoint());
     await _studyJamClient.sendMessage(SjMessageSendsDto(
       text: message,
       geopoint: location.toGeopoint(),

@@ -3,6 +3,8 @@ import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_dto
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/models/chat_user_local_dto.dart';
 import 'package:surf_practice_chat_flutter/features/chat/repository/chat_repository.dart';
+import 'package:surf_practice_chat_flutter/features/chat/models/chat_geolocation_geolocation_dto.dart';
+import 'package:surf_practice_chat_flutter/features/chat/models/chat_message_location_dto.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Main screen of chat app, containing messages.
@@ -60,12 +62,21 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _onSendPressed(String messageText) async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
     print(position);
-
-
-
-    final messages = await widget.chatRepository.sendMessage(messageText);
+    var _location = ChatGeolocationDto(latitude: position.latitude, longitude: position.longitude);
+    // final messages = await widget.chatRepository.sendMessage(messageText);
+    print(_location);
+    print(_location.toGeopoint());
+    final messages = await widget.chatRepository.sendGeolocationMessage(message: messageText, location: _location);
     setState(() {
       _currentMessages = messages;
     });
@@ -82,7 +93,11 @@ class _ChatBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ScrollController __controller = ScrollController(initialScrollOffset: ScrollController().position.maxScrollExtent);
     return ListView.builder(
+      // reverse: true,
+      // controller: __controller,
+      shrinkWrap: true,
       itemCount: messages.length,
       itemBuilder: (_, index) => _ChatMessage(
         chatData: messages.elementAt(index),
@@ -174,7 +189,9 @@ class _ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Material(
-      color: chatData.chatUserDto is ChatUserLocalDto ? colorScheme.primary.withOpacity(.1) : null,
+      color: chatData.chatUserDto is ChatUserLocalDto
+          ? colorScheme.primary.withOpacity(.1)
+          : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 18,
@@ -195,6 +212,8 @@ class _ChatMessage extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(chatData.message ?? ''),
+                  Text( chatData.runtimeType == ChatMessageGeolocationDto ? 'latitude: ${(chatData as ChatMessageGeolocationDto).location.latitude.toString()}': ''),
+                  Text( chatData.runtimeType == ChatMessageGeolocationDto ? 'longitude: ${(chatData as ChatMessageGeolocationDto).location.longitude.toString()}': ''),
                 ],
               ),
             ),
@@ -228,7 +247,8 @@ class _ChatAvatar extends StatelessWidget {
         child: Center(
           child: Text(
             userData.name != null
-                ? '${userData.name!.split(' ').first[0]}${userData.name!.split(' ').last[0]}'
+                ? ''
+                // ? '${userData.name!.split(' ').first[0]}${userData.name!.split(' ').last[0]}'
                 : '',
             style: TextStyle(
               color: colorScheme.onPrimary,
