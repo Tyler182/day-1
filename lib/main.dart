@@ -17,6 +17,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData().copyWith(
+        colorScheme: ThemeData().colorScheme.copyWith(
+              primary: Colors.green,
+            ),
+      ),
       home: AuthScreen(
         authRepository: AuthRepository(StudyJamClient()),
       ),
