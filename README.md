@@ -19,6 +19,7 @@
 Реализовано сохранение токена с использованием shared_preferences.
 
 var prefs = await SharedPreferences.getInstance();
+
 await prefs.setString('token', token.token);
 
 ### Задание 3. Снекбар
